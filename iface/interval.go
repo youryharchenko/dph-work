@@ -11,7 +11,7 @@ type Interval interface {
 	StartedLater(Interval) bool
 	EndedEarlier(Interval) bool
 	EndedLater(Interval) bool
-	//Plus(Interval) Interval
+	Plus(Interval) Interval
 	//Minus(Interval) Interval
 	Intersection(Interval) Interval
 	IsEmpty() bool

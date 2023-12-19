@@ -106,3 +106,55 @@ func (ei EventInterval) Intersection(i iface.Interval) iface.Interval {
 
 	return NewEmptyEventInterval()
 }
+
+func (ei EventInterval) Plus(i iface.Interval) iface.Interval {
+	if ei.IsEmpty() && i.IsEmpty() {
+		return NewEmptyEventInterval()
+	}
+	if ei.IsEmpty() {
+		return NewEmptyEventInterval()
+	}
+	if ei.Contains(i) {
+		return NewEventInterval(ei.Start(), ei.End())
+	}
+	if i.Contains(ei) {
+		return NewEventInterval(i.Start(), i.End())
+	}
+
+	if !ei.Intersection(i).IsEmpty() {
+		if ei.SameStart(i) || ei.StartedEarlier(i) {
+			return NewEventInterval(ei.Start(), i.End())
+		}
+		if i.SameStart(ei) || i.StartedEarlier(ei) {
+			return NewEventInterval(i.Start(), ei.End())
+		}
+	}
+	return NewEmptyEventInterval()
+}
+
+/*
+func (ei EventInterval) Minus(i iface.Interval) iface.Interval {
+	if ei.IsEmpty() && i.IsEmpty() {
+		return NewEmptyEventInterval()
+	}
+
+	if ei.IsEmpty() {
+		return NewEmptyEventInterval()
+	}
+
+	if i.IsEmpty() {
+		return NewEventInterval(ei.Start(), ei.End())
+	}
+
+	if !ei.Intersection(i).IsEmpty() {
+		if ei.SameStart(i) || ei.StartedEarlier(i) {
+			return NewEventInterval(ei.Start(), i.Start())
+		}
+		if i.SameStart(ei) || i.StartedEarlier(ei) {
+			return NewEventInterval(i.Start(), ei.Start())
+		}
+	}
+
+	return NewEmptyEventInterval()
+}
+*/

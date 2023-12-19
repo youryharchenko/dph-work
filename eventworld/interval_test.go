@@ -154,3 +154,92 @@ func TestIntersectionInterval(t *testing.T) {
 	}
 
 }
+
+func TestPlusInterval(t *testing.T) {
+	var ts1 iface.Timestamp = NewEventTimestamp()
+	time.Sleep(10 * time.Microsecond)
+	var ts2 iface.Timestamp = NewEventTimestamp()
+	time.Sleep(10 * time.Microsecond)
+	var ts3 iface.Timestamp = NewEventTimestamp()
+	time.Sleep(10 * time.Microsecond)
+	var ts4 iface.Timestamp = NewEventTimestamp()
+
+	var ei0 iface.Interval = NewEmptyEventInterval()
+
+	var ei1 iface.Interval = NewEventInterval(ts1, ts2)
+	var ei2 iface.Interval = NewEventInterval(ts1, ts2)
+
+	var ei3 iface.Interval = NewEventInterval(ts1, ts3)
+	var ei4 iface.Interval = NewEventInterval(ts2, ts4)
+
+	var ei5 iface.Interval = NewEventInterval(ts1, ts4)
+	//var ei6 iface.Interval = NewEventInterval(ts2, ts3)
+
+	var ei7 iface.Interval = NewEventInterval(ts3, ts4)
+
+	if !ei0.Plus(ei0).IsEmpty() {
+		t.Error("!ei0.Plus(ei0).IsEmpty()")
+	}
+
+	if !ei1.Equal(ei1.Plus(ei0)) {
+		t.Error("!ei1.Equal(ei1.Plus(ei0))")
+	}
+
+	if !ei0.Plus(ei2).IsEmpty() {
+		t.Error("!ei2.Equal(ei0.Plus(ei2))")
+	}
+
+	if !ei5.Equal(ei3.Plus(ei4)) {
+		t.Error("!ei5.Equal(ei3.Plus(ei4))")
+	}
+
+	if !ei5.Equal(ei4.Plus(ei3)) {
+		t.Error("!ei5.Equal(ei4.Plus(ei3))")
+	}
+
+	if !ei2.Plus(ei7).IsEmpty() {
+		t.Error("!ei2.Plus(ei7).IsEmpty()")
+	}
+
+	if !ei7.Plus(ei2).IsEmpty() {
+		t.Error("ei7.Plus(ei2).IsEmpty()")
+	}
+
+}
+
+/*
+func TestMinusInterval(t *testing.T) {
+	var ts1 iface.Timestamp = NewEventTimestamp()
+	time.Sleep(10 * time.Microsecond)
+	var ts2 iface.Timestamp = NewEventTimestamp()
+	time.Sleep(10 * time.Microsecond)
+	var ts3 iface.Timestamp = NewEventTimestamp()
+	time.Sleep(10 * time.Microsecond)
+	var ts4 iface.Timestamp = NewEventTimestamp()
+
+	aei := [8]iface.Interval{}
+
+	aei[0] = NewEmptyEventInterval()
+
+	aei[1] = NewEventInterval(ts1, ts2)
+	aei[2] = NewEventInterval(ts1, ts2)
+
+	aei[3] = NewEventInterval(ts1, ts3)
+	aei[4] = NewEventInterval(ts2, ts4)
+
+	aei[5] = NewEventInterval(ts1, ts4)
+	aei[6] = NewEventInterval(ts2, ts3)
+
+	aei[7] = NewEventInterval(ts3, ts4)
+
+	for k, ei := range aei {
+		for l, i := range aei {
+			r := ei.Minus(i)
+			s := r.Plus(i)
+			if !ei.Equal(s) {
+				t.Errorf("\n%d,%d,\nei=%s is not equal s=%s, i=%s, r=%s", k, l, ei, i, s, r)
+			}
+		}
+	}
+}
+*/
