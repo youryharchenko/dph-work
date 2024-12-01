@@ -1,5 +1,10 @@
 module github.com/youryharchenko/dph-work
 
-go 1.20
+go 1.22.0
 
-require github.com/google/uuid v1.5.0
+toolchain go1.23.1
+
+require (
+	github.com/google/uuid v1.5.0
+	golang.org/x/exp v0.0.0-20241108190413-2d47ceb2692f
+)
